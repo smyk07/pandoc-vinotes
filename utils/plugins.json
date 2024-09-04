@@ -1,0 +1,8 @@
+{
+  "smyk07/pandoc-vinotes": {
+    "utils": ["export", "export-vault"],
+    "opts": {
+      "default_export_dir": "exports"
+    }
+  }
+}

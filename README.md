@@ -15,6 +15,7 @@ Add the below to your `plugin.json` for installing `pandoc-vinotes` in your vaul
 "smyk07/pandoc-vinotes": {
   "utils": ["export", "export-vault"],
   "opts": {}
+}
 ```
 
 _Be sure to run `vn check-plugins` once added..._

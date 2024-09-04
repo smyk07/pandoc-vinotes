@@ -2,7 +2,9 @@
 # command: describe the command
 
 # import dependencies
-# import sys
+import sys
+import subprocess
+from pathlib import Path
 
 
 # import templates and config
@@ -28,11 +30,35 @@ Converts the given file or chosen file into PDF and saves into the directory pro
 This basically integrates pandoc into vinotes.
         """
         self.util_type = "command"
-        self.command_args = command_args
+        self.command_args = " ".join(command_args)
 
     def command(self):
-        # write your command here
-        pass  # delete this line
+        if self.command_args == "":
+            try:
+                dirs = " ".join([i for i in get_config("principle_dirs")])
+                file_path = Path(
+                    subprocess.check_output(
+                        f"find ./ {dirs} \\( -iname '*.md' \\) -type f 2>/dev/null | fzf",
+                        shell=True,
+                        executable=f"{get_config('shell_executable')}",
+                    ).decode("utf-8")[:-1]
+                )
+            except subprocess.CalledProcessError:
+                quit()
+        else:
+            file_path = Path(self.command_args)
+
+            if not file_path.is_file():
+                print("File does not exist...")
+                quit()
+
+        print("Exporting to PDF...")
+        subprocess.run(
+            f"pandoc -o ./{plugin_config['opts']['default_export_dir']}/{str(file_path).split('/')[-1][:-3]}.pdf {str(file_path)}",
+            shell=True,
+            executable=get_config("shell_executable"),
+        )
+        print("Done!")
 
 
 # write helper functions here (delete the code below obv)
@@ -41,4 +67,5 @@ This basically integrates pandoc into vinotes.
 
 # test file if run as main.
 if __name__ == "__main__":
-    pass  # testing code goes here.
+    test_util = Util(sys.argv[1:])
+    test_util.command()
