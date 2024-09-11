@@ -52,9 +52,9 @@ This basically integrates pandoc into vinotes.
                 print("File does not exist...")
                 quit()
 
-        print("Exporting to PDF...")
+        print(f"Exporting to .{plugin_config['opts']['default_export_format']}")
         subprocess.run(
-            f"pandoc -o ./{plugin_config['opts']['default_export_dir']}/{str(file_path).split('/')[-1][:-3]}.pdf {str(file_path)}",
+            f"pandoc -o ./{plugin_config['opts']['default_export_dir']}/{str(file_path).split('/')[-1][:-3]}.{plugin_config['opts']['default_export_format']} {str(file_path)}",
             shell=True,
             executable=get_config("shell_executable"),
         )
